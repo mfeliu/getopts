@@ -406,10 +406,13 @@ impl Options {
                         // FloatingFrees is in use.
                         if let Some(i_arg) = i_arg.take() {
                             vals[optid].push(Val(i_arg));
-                        } else if was_long || name_pos < names.len() || args.peek().map_or(true, |n| is_arg(&n)) {
-                            vals[optid].push(Given);
                         } else {
-                            vals[optid].push(Val(args.next().unwrap()));
+                            let areAllArgs =args.peek().map_or(true, |n| is_arg(&n));
+                            if was_long || name_pos < names.len() || areAllArgs {
+                            vals[optid].push(Given);
+                            } else {
+                                vals[optid].push(Val(args.next().unwrap()));
+                            }
                         }
                       }
                       Yes => {
